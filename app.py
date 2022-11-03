@@ -60,7 +60,7 @@ def perform_query() -> Response:
         abort(400)
 
     # проверить, что файла file_name существует в папке DATA_DIR, при ошибке вернуть ошибку 400
-    data_file_name: str = os.path.join(DATA_DIR, "apache_logs.txt")
+    data_file_name: str = os.path.join(DATA_DIR, request.form.get("file_name", "apache_logs.txt"))
     if not os.path.exists(data_file_name):
         abort(400)
 
