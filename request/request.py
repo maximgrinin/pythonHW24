@@ -26,5 +26,6 @@ payload={
 }
 """
 
-response = requests.request("POST", url, data=payload)
+# response = requests.request("POST", url, data=payload)
+response = requests.request("POST", url, params=payload)
 print(response.text)

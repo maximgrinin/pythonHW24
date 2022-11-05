@@ -56,19 +56,19 @@ def perform_query() -> Response:
     # добавить типизацию в проект, чтобы проходила утилиту mypy app.py
 
     # получить параметры query и file_name из request.args, при ошибке вернуть ошибку 400
-    if not all((request.form.get("cmd1", ""), request.form.get("value1", ""), request.form.get("file_name", ""))):
+    if not all((request.args.get("cmd1", ""), request.args.get("value1", ""), request.args.get("file_name", ""))):
         abort(400)
 
     # проверить, что файла file_name существует в папке DATA_DIR, при ошибке вернуть ошибку 400
-    data_file_name: str = os.path.join(DATA_DIR, request.form.get("file_name", "apache_logs.txt"))
+    data_file_name: str = os.path.join(DATA_DIR, request.args.get("file_name", "apache_logs.txt"))
     if not os.path.exists(data_file_name):
         abort(400)
 
     # с помощью функционального программирования (функций filter, map), итераторов/генераторов сконструировать запрос
     # вернуть пользователю сформированный результат
     log: Iterable[str] = file_reader(data_file_name)
-    args: dict = dict(zip({v: '' for k, v in request.form.to_dict().items() if k[:3] == 'cmd'},
-                          {v: '' for k, v in request.form.to_dict().items() if k[:3] == 'val'}))
+    args: dict = dict(zip({v: '' for k, v in request.args.to_dict().items() if k[:3] == 'cmd'},
+                          {v: '' for k, v in request.args.to_dict().items() if k[:3] == 'val'}))
     for k, v in args.items():
         match k:
             case 'filter':
